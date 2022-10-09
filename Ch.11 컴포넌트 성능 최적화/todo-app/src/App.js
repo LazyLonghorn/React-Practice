@@ -3,26 +3,23 @@ import TodoInsert from "./TodoInsert";
 import TodoList from "./TodoList";
 import TodoTemplate from "./TodoTemplate";
 
-function App() {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      text: 'Recat Basic',
-      checked: true,
-    },
-    {
-      id: 2,
-      text: 'Javascript Basic',
-      checked: true,
-    },
-    {
-      id: 3,
-      text: 'Todo App',
+function createBulkTodos() {
+  const array = [];
+  for(let i=1; i<=2500; ++i) {
+    array.push({
+      id: i,
+      text: `할 일 ${i}`,
       checked: false,
-    }
-  ]);
+    });
+  }
 
-  const nextId = useRef(4);
+  return array;
+}
+
+function App() {
+  const [todos, setTodos] = useState(createBulkTodos);
+
+  const nextId = useRef(2501);
   
   const onInsert = useCallback(
     text => {
@@ -32,20 +29,18 @@ function App() {
         checked: false,
       }
 
-      setTodos(todos.concat(todo));
+      setTodos(todos => todos.concat(todo));
       nextId.current += 1;
-
-    }, [todos]
-  );
+  }, []);
 
   const onRemove = useCallback(id => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  }, [todos]);
+    setTodos(todos => todos.filter(todo => todo.id !== id));
+  }, []);
 
   const onToggle = useCallback(id => {
-    setTodos(todos.map(
+    setTodos(todos => todos.map(
       todo => todo.id === id ? {...todo, checked: !todo.checked } : todo));
-  } , [todos]);
+  }, []);
 
   return (
     <Fragment>
