@@ -23,7 +23,7 @@ const sampleArticle = {
     urlToImage: 'https://via.placeholder.com/160'
 }
 
-const NewsList = () => {
+const NewsList = ( {category} ) => {
 
     const [articles, setArticles] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -33,7 +33,8 @@ const NewsList = () => {
             setLoading(true);
 
             try {
-                const res = await axios.get('https://newsapi.org/v2/top-headlines?country=kr&apiKey=882f462a67c647daa5c2efa09ffa8027');
+                const query = (category === 'all') ? '' : `&category=${category}`;
+                const res = await axios.get(`https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=882f462a67c647daa5c2efa09ffa8027`);
                 setArticles(res.data.articles);
             } catch(e) {
                 console.log(e);
@@ -43,7 +44,7 @@ const NewsList = () => {
         };
 
         fetchData();
-    }, []);
+    }, [category]);
 
     // Loading
     if(loading) {
