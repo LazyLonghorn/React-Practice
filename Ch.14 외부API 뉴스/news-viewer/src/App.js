@@ -3,7 +3,7 @@ import axios from 'axios'
 import NewsList from "./components/NewsList";
 import Categories from "./components/Categories";
 import NewsPage from "./pages/NewsPage";
-import { Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 
 function App() {
@@ -24,7 +24,9 @@ function App() {
 
     <Fragment>
       <Routes>
-        
+        {/* <Route path="/:category?" element={<NewsPage/>}/> */}
+        <Route path="/" element={<NewsPage/>}/>
+        <Route path="/:category" element={<NewsPage/>}/>
       </Routes>
     </Fragment>
   )

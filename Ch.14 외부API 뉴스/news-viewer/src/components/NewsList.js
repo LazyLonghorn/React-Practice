@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import NewsItem from './NewsItem';
 import axios from 'axios'
+import usePromise from '../lib/usePromise';
 
 const NewsListBlock = styled.div`
     box-sizing: border-box;
@@ -25,35 +26,47 @@ const sampleArticle = {
 
 const NewsList = ( {category} ) => {
 
-    const [articles, setArticles] = useState(null);
-    const [loading, setLoading] = useState(false);
+    // const [articles, setArticles] = useState(null);
+    // const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-
-            try {
-                const query = (category === 'all') ? '' : `&category=${category}`;
-                const res = await axios.get(`https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=882f462a67c647daa5c2efa09ffa8027`);
-                setArticles(res.data.articles);
-            } catch(e) {
-                console.log(e);
-            }
-
-            setLoading(false);
-        };
-
-        fetchData();
+    const [loading, response, error] = usePromise(() => {
+        const query = (category === 'all') ? '' : `&category=${category}`;
+        return axios.get(`https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=882f462a67c647daa5c2efa09ffa8027`);
     }, [category]);
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         setLoading(true);
+
+    //         try {
+    //             const query = (category === 'all') ? '' : `&category=${category}`;
+    //             const res = await axios.get(`https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=882f462a67c647daa5c2efa09ffa8027`);
+    //             setArticles(res.data.articles);
+    //         } catch(e) {
+    //             console.log(e);
+    //         }
+
+    //         setLoading(false);
+    //     };
+
+    //     fetchData();
+    // }, [category]);
 
     // Loading
     if(loading) {
         return <NewsListBlock>Loading ....</NewsListBlock>
     }
     // articles 값이 설정되지 않을 때
-    if(!articles) {
+    // if(!articles) {
+    if(!response) {
         return null;
     }
+
+    if(error) {
+        return <NewsListBlock>Error occurred</NewsListBlock>;
+    }
+
+    const {articles} = response.data;
 
     return (
         <NewsListBlock>
