@@ -1,14 +1,16 @@
 import { Fragment } from 'react';
 import ColorBox from './components/ColorBox';
-import ColorContext from './contexts/color';
+import SelectedColors from './components/SelectedColors';
+import { ColorProvider } from './contexts/color';
 
 function App() {
   return (
-    <ColorContext.Provider value={{color: 'red'}}>
+    <ColorProvider>
       <Fragment>
+        <SelectedColors/>
         <ColorBox/>
       </Fragment>
-    </ColorContext.Provider>
+    </ColorProvider>
   );
 }
 
