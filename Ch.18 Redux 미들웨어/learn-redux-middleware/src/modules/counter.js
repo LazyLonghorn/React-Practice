@@ -28,7 +28,6 @@ export const decreaseAsync = () => dispatch => {
     }, 1000);
 };
 
-
 const counter = handleActions(
     {
         [INCREASE]: state => state + 1
