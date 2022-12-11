@@ -1,28 +1,51 @@
+import { useEffect } from "react";
 import { connect } from "react-redux"
 import Sample from '../components/Sample';
 import { getPost, getUsers } from "../modules/sample";
 
 const SampleContainer = ( {getPost, getUsers, post, users, loadingPost, loadingUsers} ) => {
-    // loadingPost, loadingUsers, post, users
-    getPost(1);
-    getUsers(1);
+    // useEffect(() => {
+    //     getPost(1);
+    //     getUsers(1);
+    // }, [getPost, getUsers]);
 
-    <Sample
-        post={post}
-        users={users}
-        loadingPost={loadingPost}
-        loadingUsers={loadingUsers}
-    />
+    useEffect(() => {
+        /*
+        *   useEffect 에 전달하는 파라미터는 async 로 작성 안됨
+        *   따라서, 아래와 같이 함수를 생성해서 호출하는 방식으로
+        */
+
+        const fn = async () => {
+            try {
+                await getPost(1);
+                await getUsers(1);
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
+        fn();
+    }, [getPost, getUsers]);
+
+    return (
+        <Sample
+                post={post}
+                users={users}
+                loadingPost={loadingPost}
+                loadingUsers={loadingUsers}
+        />
+    )
 }
 
-
 export default connect(
-    ({ sample }) => (
+    ({ sample, loading }) => (
         {
             post: sample.post,
             users: sample.users,
-            loadingPost: sample.loadingPost,
-            loadingUsers: sample.loadingUsers
+            loadingPost: loading['sample/GET_POST'],
+            loadingUsers: loading['sample/GET_USERS'],
+            // loadingPost: sample.loadingPost
+            // loadingUsers: sample.loadingUsers
         }      
     ),
     {
