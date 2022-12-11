@@ -5,7 +5,11 @@ import SampleContainer from "./containers/SampleContainer";
 function App() {
   return (
     <Fragment>
-      <SampleContainer/>
+      {/* <SampleContainer/> */}
+
+      {/* redux-saga */}
+      <CounterContainer/>   
+      {/* <SampleContainer/> */}
     </Fragment>
   );
 }
